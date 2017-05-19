@@ -1,6 +1,7 @@
 import random_walk
 import argparse
 import pacmaze
+import random
 import search
 import os
 
@@ -11,8 +12,11 @@ def run(params):
     :param params:
     :return:
     """
+    # sets random seed
+    if 'random_seed' in params:
+        random.seed(params['random_seed'])
     
-    # creates data directory
+    # creates output directory
     outdir = params['output_dir']
     if not os.path.exists(outdir):
         os.mkdir(outdir)
@@ -26,12 +30,14 @@ def run(params):
     # sets diagonal moves as specified by user
     maze.set_diagonal_moves(args['diagonals'])
 
-    goals = [(9, 9), (11, 11), (0, 0), (11, 5)]  # for 12x12 world
-    #goals = [(6, 6), (0, 0), (0, 6), (6, 0)]  # for 7x7 world
-    
-    for num, goal in enumerate(goals):
+    for num in range(args['number_trials']): #, goal in enumerate(goals):
 
         outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
+
+        # randomly selects the goal within world boundaries
+        row = random.randint(0, len(maze._world) - 1)
+        col = random.randint(0, len(maze._world[0]) - 1)
+        goal = (row, col)
 
         print 'Current goal: (%d, %d)' % goal
 
@@ -61,7 +67,16 @@ def run(params):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='PacMusic - A PacMan-like world with music.')
+
     parser.add_argument('-w', '--world', type=str, help='Path to the world file')
+    parser.add_argument(
+        '-n', '--number-trials', type=int, default=100,
+        help='Number of goals the agent must seek'
+    )
+    parser.add_argument(
+        '-s', '--random_seed', type=int,
+        help='A number to seed the random generator'
+    )
     parser.add_argument('-d', '--diagonals', action='store_true', help='Allow diagonal moves')
     parser.add_argument(
         '-o', '--output-dir', type=str, help='Directory where output is generated',
@@ -71,6 +86,7 @@ if __name__ == '__main__':
         '-m', '--method', type=str, help='Method used by PacMan to move.',
         action='store', default='astar', choices=['astar', 'random', 'randombiased']
     )
+
     args = vars(parser.parse_args())
 
     run(args)
