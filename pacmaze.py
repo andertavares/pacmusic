@@ -70,18 +70,6 @@ class PacMaze:
     GOAL = '*'
 
     def __init__(self, inputfile):
-        '''lines_array = open(inputfile).readlines()
-        self._world_rows, self._world_cols = (int(x) for x in lines_array[0].split(' '))
-        self._world = lines_array[1:]
-
-        self._pacman_pos = (-1, -1)
-        self._goal_pos = (-1, -1)
-        for rownum, row in enumerate(self._world):
-            for colnum, col in enumerate(row):
-                if col == self.PACMAN:
-                    self._pacman_pos = (rownum, colnum)
-                elif col == self.GOAL:
-                    self._goal_pos = (rownum, colnum)'''
 
         # default 12 x 12 grid
         self._world = [
@@ -115,6 +103,14 @@ class PacMaze:
         :return:
         """
         return self._world[row][col]
+
+    def set_diagonal_moves(self, true_or_false):
+        """
+        Allow or disallow diagonal moves
+        :param true_or_false:bool
+        :return:
+        """
+        self._allow_diagonals = true_or_false
 
     def pacman_position(self):
         return self._pacman_pos
