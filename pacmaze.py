@@ -52,6 +52,7 @@ CHORDS = {
 class PacMaze:
 
     STRAIGHT = {
+        'imovel': (0, 0),   # stand still
         'acima': (-1, 0),
         'abaixo': (1, 0),
         'esquerda': (0, -1),
@@ -144,7 +145,7 @@ class PacMaze:
         # if diagonal moves are allowed, merge move dicts
         if self._allow_diagonals:
             allowed_moves.update(self.DIAGONALS)
-        #print allowed_moves
+
         for direction_name, direction in allowed_moves.iteritems():
             new_row, new_col = self.apply_move((row, col), direction)
 
@@ -231,7 +232,6 @@ class PacMaze:
             moves.update(self.DIAGONALS)
         
         # adds current position to path
-        print position
         path.append((position[0], position[1], self.query(position[0], position[1])))
 
         for direction in directions:

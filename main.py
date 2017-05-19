@@ -1,3 +1,4 @@
+import random_walk
 import argparse
 import pacmaze
 import search
@@ -32,10 +33,19 @@ def run(params):
 
         outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
 
-        print 'Current goal: (%d,%d)' % goal
+        print 'Current goal: (%d, %d)' % goal
 
         maze.set_goal(goal[0], goal[1])
-        directions = search.astar(maze, maze.pacman_position())
+
+        directions = []
+
+        # determines which method will be used for walking
+        if params['method'] == 'astar':
+            directions = search.astar(maze, maze.pacman_position())
+
+        elif params['method'] == 'random':
+            directions = random_walk.random_walk(maze, maze.pacman_position())
+
         # print 'Directions:', directions #pacmaze.PacMaze.solution(goal)
         
         path = maze.walk(maze.pacman_position(), directions)
@@ -56,6 +66,10 @@ if __name__ == '__main__':
     parser.add_argument(
         '-o', '--output-dir', type=str, help='Directory where output is generated',
         default='data'
+    )
+    parser.add_argument(
+        '-m', '--method', type=str, help='Method used by PacMan to move.',
+        action='store', default='astar', choices=['astar', 'random', 'randombiased']
     )
     args = vars(parser.parse_args())
 
