@@ -99,11 +99,13 @@ class PacMaze:
             'DEFGABCBAGFE'
         ]
 
+        # loads world from an input file
+        if inputfile is not None:
+            self._world = [line.strip() for line in open(inputfile).readlines()]
+
         self._allow_diagonals = False
         self._pacman_pos = (5, 5)
         self._goal = (0, 0)  # a default goal
-        #self._goals = [(9,9), (11,11), (0,0), (11,5)]
-        #self._current_goal_index = 0 #index to the current goal
 
     def query(self, row, col):
         """
@@ -283,7 +285,7 @@ class PacMaze:
 
     def __str__(self):
         # header
-        string = '  ' + ''.join([str(x) for x in range(len(self._world))]) + '\n'
+        string = '   ' + ''.join([str(x) for x in range(len(self._world[0]))]) + '\n'
 
         for i, row in enumerate(self._world):
             

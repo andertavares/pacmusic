@@ -1,20 +1,34 @@
-import os
+import argparse
 import pacmaze
 import search
+import sys
+import os
 
 
-def run():
+def run(params):
+    """
+    Runs the program with parameters specified from command line
+    :param params:
+    :return:
+    """
     
     # creates data directory
-    if not os.path.exists('data'):
-        os.mkdir('data')
+    outdir = params['output_dir']
+    if not os.path.exists(outdir):
+        os.mkdir(outdir)
 
-    maze = pacmaze.PacMaze(None)
-    goals = [(9, 9), (11, 11), (0, 0), (11, 5)]
+    worldfile = None
+    if 'world' in params:
+        worldfile = params['world']
+
+    maze = pacmaze.PacMaze(worldfile)
+
+    goals = [(9, 9), (11, 11), (0, 0), (11, 5)]  # for 12x12 world
+    #goals = [(6, 6), (0, 0), (0, 6), (6, 0)]  # for 7x7 world
     
     for num, goal in enumerate(goals):
 
-        outfile = open('data/log%d.log' % num, 'w')
+        outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
 
         print 'Current goal: (%d,%d)' % goal
 
@@ -33,5 +47,15 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+
+    parser = argparse.ArgumentParser(description='PacMusic - A PacMan-like world with music.')
+    parser.add_argument('-w', '--world', type=str, help='Path to the world file')
+    parser.add_argument('-d', '--with-diagonals', action='store_true', help='Allow diagonal moves')
+    parser.add_argument(
+        '-o', '--output-dir', type=str, help='Directory where output is generated',
+        default='data'
+    )
+    args = vars(parser.parse_args())
+
+    run(args)
     print 'Done'
