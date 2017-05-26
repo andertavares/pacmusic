@@ -37,7 +37,11 @@ E = 5
 F = 6
 G = 7   
 
-CHORDS = {
+"""
+Use the note name to retrieve a
+corresponding integer
+"""
+NOTE_TO_INT = {
     'SILENCE': 0,
     'A': 1,
     'B': 2,
@@ -47,6 +51,11 @@ CHORDS = {
     'F': 6,
     'G': 7,
 }
+
+"""
+Use a integer to retrieve a note
+"""
+INT_TO_NOTE = ['SILENCE', 'A','B','C','D','E','F','G']
 
 
 class PacMaze:

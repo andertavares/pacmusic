@@ -57,8 +57,8 @@ def run(params):
         path = maze.walk(maze.pacman_position(), directions)
         # print 'PM at', maze.pacman_position()
 
-        outfile.write('\n'.join(['%d, %d, %d' % (x[0], x[1], pacmaze.CHORDS[x[2]]) for x in path]))
-        # print '\n'.join(['%d, %d, %s' % (x[0], x[1], pacmaze.CHORDS[x[2]]) for x in path])
+        outfile.write('\n'.join(['%d, %d, %s' % (x[0], x[1], x[2]) for x in path]))
+        # print '\n'.join(['%d, %d, %s' % (x[0], x[1], pacmaze.NOTE_TO_INT[x[2]]) for x in path])
 
         print 'File written.'
         outfile.close()
