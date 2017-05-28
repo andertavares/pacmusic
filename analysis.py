@@ -1,4 +1,4 @@
-
+from Lexer.lexer import Lexer
 
 class Stats(object):
     def __init__(self):
@@ -13,6 +13,11 @@ class Stats(object):
         :param input_file:
         :return:
         """
+	m = Lexer()
+        m.build()           # Build the lexer
+        self._arpeggios = m.getArpeggios(input_file)
+        self._power_chords = m.getPowerChords(input_file)
+        self._notes = m.getNotes(input_file)
         pass
 
     @property
