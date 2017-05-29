@@ -5,6 +5,8 @@ class Stats(object):
         self._arpeggios = []
         self._power_chords = []
         self._notes = []
+        # a list of dicts [{'from':(row,col), 'to':(row,col)}, ...]
+        self._diagonal_moves = []
     def analyse(self, input_file):
         """
         Analyse a file, storing arpeggios and power chords
@@ -13,9 +15,15 @@ class Stats(object):
         """
         seq_notes = []
         f = open(input_file,'r')
+        rw = []
+        cl = []
         for line in f:
             line = line.replace(" ", "").replace("\n", "") #Remove whitespace
+            rw.append(int(line.split(',')[0]))
+            cl.append(int(line.split(',')[1]))
             seq_notes.append(line.split(',')[2])
+
+        self._diagonal_moves = lx.getDiagonalMoves(rw,cl)
         self._arpeggios = lx.getArpeggios("".join(seq_notes))
         self._power_chords = lx.getPowerChords("".join(seq_notes))
         self._notes = lx.getNotes("".join(seq_notes))
@@ -43,3 +51,11 @@ class Stats(object):
         :return:
         """
         return self._power_chords
+
+    @property
+    def diagonals(self):
+        """
+        Returns the number of diagonal moves encountered
+        :return: list
+        """
+        return self._diagonal_moves

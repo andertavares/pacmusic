@@ -41,3 +41,16 @@ def getNotes(data):
         else:
             break
     return arp;
+
+
+def getDiagonalMoves(row,col):
+    arp = []
+    for i in range(len(row)):
+        if(i==(len(row)-1)):
+            break
+        else:
+            if((abs(row[i+1] - row[i])!=0) and (abs(col[i+1] - col[i])!=0)):
+                arp.append({'from':(row[i],col[i]), 'to':(row[i+1],col[i+1])})
+            else:
+                pass
+    return arp;
