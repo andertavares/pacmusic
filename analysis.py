@@ -7,6 +7,8 @@ class Stats(object):
         self._notes = []
         # a list of dicts [{'from':(row,col), 'to':(row,col)}, ...]
         self._diagonal_moves = []
+        self._positions = []
+
     def analyse(self, input_file):
         """
         Analyse a file, storing arpeggios and power chords
@@ -23,11 +25,15 @@ class Stats(object):
             cl.append(int(line.split(',')[1]))
             seq_notes.append(line.split(',')[2])
 
-        self._diagonal_moves = lx.getDiagonalMoves(rw,cl)
+            # stores the visited positions
+            self._positions.append((int(line.split(',')[0]), int(line.split(',')[1])) )
+
+        self._diagonal_moves = lx.getDiagonalMoves(rw, cl)
         self._arpeggios = lx.getArpeggios("".join(seq_notes))
         self._power_chords = lx.getPowerChords("".join(seq_notes))
         self._notes = lx.getNotes("".join(seq_notes))
         # m.test("".join(seq_notes))# Test it
+
     @property
     def arpeggios(self):
         """
@@ -59,3 +65,18 @@ class Stats(object):
         :return: list
         """
         return self._diagonal_moves
+
+    @property
+    def positions(self):
+        """
+        Returns a list of tuples with the traveled coordinates
+        :return:
+        """
+        return self._positions
+
+    def num_moves(self):
+        """
+        Returns the number of moves performed
+        :return:
+        """
+        return max(0, len(self._positions) - 1)
