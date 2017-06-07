@@ -50,6 +50,29 @@ class TestStats(unittest.TestCase):
         # 4 moves are performed in arpeggios.log
         self.assertEquals(4, stats.num_moves())
 
+    def test_occurrences(self):
+        stats = analysis.Stats()
+        stats.analyse("intervals.log")
+
+        # intervals.log has CEG twice and BF 4 times
+
+        self.assertEquals(2, stats.occurrences('CEG'))
+        self.assertEquals(4, stats.occurrences('BF'))
+        self.assertEquals(0, stats.occurrences('GBD'))
+
+    def test_intervals(self):
+        stats = analysis.Stats()
+        stats.analyse("intervals.log")
+
+        # CEG is separated by two notes
+        self.assertEquals([2], stats.intervals('CEG'))
+
+        # BF occurrences are separated by 3, 0 and 1 notes
+        self.assertEquals([3, 0, 1], stats.intervals('BF'))
+
+        # GBD does not occur, so empty list of intervals
+        self.assertEquals([], stats.intervals('GBD'))
+
 
 if __name__ == '__main__':
     unittest.main()

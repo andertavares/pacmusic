@@ -80,3 +80,22 @@ class Stats(object):
         :return:
         """
         return max(0, len(self._positions) - 1)
+
+    def occurrences(self, sequence):
+        """
+        Returns the number of times a given sequence
+        (chord or power chord) has occurred
+        :param sequence: str
+        :return: int
+        """
+        pass
+
+    def intervals(self, sequence):
+        """
+        Returns a list with the intervals (number of
+        other notes) between occurrences of the given
+        chord or power chord
+        :param sequence: str
+        :return: list of int
+        """
+        pass
