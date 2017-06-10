@@ -4,43 +4,59 @@ import re
 
 def getArpeggios(data):
     arp = []
-    rex = r'(ECG|EGC|CEG|CGE|GEC|GCE|DFA|DAF|FDA|FAD|ADF|AFD|EGB|EBG|GEB|GBE|BEG|BGE|FAC|FCA|AFC|ACF|CFA|CAF|GBD|GDB|BGD|BDG|DGB|DBG|ACE|AEC|CAE|CEA|EAC|ECA|BDF|BFD|DBF|DFB|FBD|FDB)'
+    rex = []
+    rex.append(r'(ECG|EGC|CEG|CGE|GEC|GCE)')
+    rex.append(r'(DFA|DAF|FDA|FAD|ADF|AFD)')
+    rex.append(r'(EGB|EBG|GEB|GBE|BEG|BGE)')
+    rex.append(r'(FAC|FCA|AFC|ACF|CFA|CAF)')
+    rex.append(r'(GBD|GDB|BGD|BDG|DGB|DBG)')
+    rex.append(r'(ACE|AEC|CAE|CEA|EAC|ECA)')
+    rex.append(r'(BDF|BFD|DBF|DFB|FBD|FDB)')
     i=0
     while True:
-        sobj = re.match(rex, data[i:])
-        if(sobj):
-            arp.append(sobj.group())
-            i=i+1
-        else:
+        for t in range(len(rex)):
+            sobj = re.match(rex[t], data[i:])
+            if(sobj):
+                arp.append({'arp':sobj.group(),'pos':i,'typ':t})
+        i=i+1
+        if(i==len(data)):
             break
     return arp;
 
 
 def getPowerChords(data):
-    arp = []
-    rex = r'(CG|GC|DA|AD|EB|BE|FC|CF|GD|DG|AE|EA|BF|FB)'
+    chd = []
+    rex = []
+    rex.append(r'(CG|GC)')
+    rex.append(r'(DA|AD)')
+    rex.append(r'(EB|BE)')
+    rex.append(r'(FC|CF)')
+    rex.append(r'(GD|DG)')
+    rex.append(r'(AE|EA)')
+    rex.append(r'(BF|FB)')
     i=0
     while True:
-        sobj = re.match(rex, data[i:])
-        if(sobj):
-            arp.append(sobj.group())
-            i=i+1
-        else:
+        for t in range(len(rex)):
+            sobj = re.match(rex[t], data[i:])
+            if(sobj):
+                chd.append({'chd':sobj.group(),'pos':i,'typ':t})
+        i=i+1
+        if(i==len(data)):
             break
-    return arp;
+    return chd;
 
 def getNotes(data):
-    arp = []
+    notes = []
     rex = r'(C|D|E|F|G|A|B)'
     i=0
     while True:
         sobj = re.match(rex, data[i:])
         if(sobj):
-            arp.append(sobj.group())
-            i=i+1
-        else:
+            notes.append({'notes':sobj.group(),'pos':i})
+        i=i+1
+        if(i==len(data)):
             break
-    return arp;
+    return notes;
 
 
 def getDiagonalMoves(row,col):

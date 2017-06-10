@@ -1,0 +1,3 @@
+{
+  "tests/test_analysis.py::TestStats::test_intervals": true
+}

@@ -1,4 +1,6 @@
 import Lexer.lexer as lx
+import re
+
 class Stats(object):
 
     def __init__(self):
@@ -40,7 +42,7 @@ class Stats(object):
         Returns the arpeggios encountered
         :return:
         """
-        return self._arpeggios
+        return [x['arp'] for x in self._arpeggios]
 
     @property
     def notes(self):
@@ -48,7 +50,7 @@ class Stats(object):
         Returns the power chords encountered
         :return:
         """
-        return self._notes
+        return [x['notes'] for x in self._notes]
 
     @property
     def power_chords(self):
@@ -56,7 +58,7 @@ class Stats(object):
         Returns the power chords encountered
         :return:
         """
-        return self._power_chords
+        return  [x['chd'] for x in self._power_chords]
 
     @property
     def diagonals(self):
@@ -88,7 +90,12 @@ class Stats(object):
         :param sequence: str
         :return: int
         """
-        pass
+        if(len(sequence)==3):
+            return len([i for i in self._arpeggios if i['arp']==sequence])
+        elif(len(sequence)==2):
+            return len([i for i in self._power_chords if i['chd']==sequence])
+        else:
+            return 0;
 
     def intervals(self, sequence):
         """
@@ -98,4 +105,50 @@ class Stats(object):
         :param sequence: str
         :return: list of int
         """
-        pass
+        if(len(sequence)==3):
+            mstipo = []
+            intervals = []
+            rex = []
+            tipo = 8
+            rex.append(r'(ECG|EGC|CEG|CGE|GEC|GCE)')
+            rex.append(r'(DFA|DAF|FDA|FAD|ADF|AFD)')
+            rex.append(r'(EGB|EBG|GEB|GBE|BEG|BGE)')
+            rex.append(r'(FAC|FCA|AFC|ACF|CFA|CAF)')
+            rex.append(r'(GBD|GDB|BGD|BDG|DGB|DBG)')
+            rex.append(r'(ACE|AEC|CAE|CEA|EAC|ECA)')
+            rex.append(r'(BDF|BFD|DBF|DFB|FBD|FDB)')
+            for t in range(len(rex)):
+                if(re.match(rex[t],sequence)):
+                    tipo = t
+                    break;
+            for i in self._arpeggios:
+                if(i['typ']==tipo):
+                    mstipo.append(i)
+            for i in range(len(mstipo)-1):
+                intervals.append(max(0,mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+3)))
+            return intervals
+
+        elif(len(sequence)==2):
+            mstipo = []
+            intervals = []
+            rex = []
+            tipo = 8
+            rex.append(r'(CG|GC)')
+            rex.append(r'(DA|AD)')
+            rex.append(r'(EB|BE)')
+            rex.append(r'(FC|CF)')
+            rex.append(r'(GD|DG)')
+            rex.append(r'(AE|EA)')
+            rex.append(r'(BF|FB)')
+            for t in range(len(rex)):
+                if(re.match(rex[t],sequence)):
+                    tipo = t
+                    break;
+            for i in self._power_chords:
+                if(i['typ']==tipo):
+                    mstipo.append(i)
+            for i in range(len(mstipo)-1):
+                intervals.append(max(0,mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+2)))
+            return intervals
+        else:
+            return [0];
