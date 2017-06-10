@@ -1,3 +1,4 @@
 {
-  "tests/test_analysis.py::TestStats::test_intervals": true
+  "tests/test_analysis.py::TestStats::test_intervals": true, 
+  "tests/test_analysis.py::TestStats::test_occurrences": true
 }

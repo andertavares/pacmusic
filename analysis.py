@@ -83,6 +83,39 @@ class Stats(object):
         """
         return max(0, len(self._positions) - 1)
 
+    @staticmethod
+    def typeOfnote(x):
+        tipo = 8
+        if(len(x)==3):
+            rex = []
+            rex.append(r'(ECG|EGC|CEG|CGE|GEC|GCE)')
+            rex.append(r'(DFA|DAF|FDA|FAD|ADF|AFD)')
+            rex.append(r'(EGB|EBG|GEB|GBE|BEG|BGE)')
+            rex.append(r'(FAC|FCA|AFC|ACF|CFA|CAF)')
+            rex.append(r'(GBD|GDB|BGD|BDG|DGB|DBG)')
+            rex.append(r'(ACE|AEC|CAE|CEA|EAC|ECA)')
+            rex.append(r'(BDF|BFD|DBF|DFB|FBD|FDB)')
+            for t in range(len(rex)):
+                if(re.match(rex[t],x)):
+                    tipo = t
+                    break;
+            return tipo;
+        elif(len(x)==2):
+            rex = []
+            tipo = 8
+            rex.append(r'(CG|GC)')
+            rex.append(r'(DA|AD)')
+            rex.append(r'(EB|BE)')
+            rex.append(r'(FC|CF)')
+            rex.append(r'(GD|DG)')
+            rex.append(r'(AE|EA)')
+            rex.append(r'(BF|FB)')
+            for t in range(len(rex)):
+                if(re.match(rex[t],x)):
+                    tipo = t
+                    break;
+            return tipo;
+
     def occurrences(self, sequence):
         """
         Returns the number of times a given sequence
@@ -91,9 +124,11 @@ class Stats(object):
         :return: int
         """
         if(len(sequence)==3):
-            return len([i for i in self._arpeggios if i['arp']==sequence])
+            tipo = self.typeOfnote(sequence)
+            return len([i for i in self._arpeggios if i['typ']==tipo])
         elif(len(sequence)==2):
-            return len([i for i in self._power_chords if i['chd']==sequence])
+            tipo = self.typeOfnote(sequence)
+            return len([i for i in self._power_chords if i['typ']==tipo])
         else:
             return 0;
 
@@ -108,19 +143,7 @@ class Stats(object):
         if(len(sequence)==3):
             mstipo = []
             intervals = []
-            rex = []
-            tipo = 8
-            rex.append(r'(ECG|EGC|CEG|CGE|GEC|GCE)')
-            rex.append(r'(DFA|DAF|FDA|FAD|ADF|AFD)')
-            rex.append(r'(EGB|EBG|GEB|GBE|BEG|BGE)')
-            rex.append(r'(FAC|FCA|AFC|ACF|CFA|CAF)')
-            rex.append(r'(GBD|GDB|BGD|BDG|DGB|DBG)')
-            rex.append(r'(ACE|AEC|CAE|CEA|EAC|ECA)')
-            rex.append(r'(BDF|BFD|DBF|DFB|FBD|FDB)')
-            for t in range(len(rex)):
-                if(re.match(rex[t],sequence)):
-                    tipo = t
-                    break;
+            tipo = self.typeOfnote(sequence)
             for i in self._arpeggios:
                 if(i['typ']==tipo):
                     mstipo.append(i)
@@ -131,19 +154,7 @@ class Stats(object):
         elif(len(sequence)==2):
             mstipo = []
             intervals = []
-            rex = []
-            tipo = 8
-            rex.append(r'(CG|GC)')
-            rex.append(r'(DA|AD)')
-            rex.append(r'(EB|BE)')
-            rex.append(r'(FC|CF)')
-            rex.append(r'(GD|DG)')
-            rex.append(r'(AE|EA)')
-            rex.append(r'(BF|FB)')
-            for t in range(len(rex)):
-                if(re.match(rex[t],sequence)):
-                    tipo = t
-                    break;
+            tipo = self.typeOfnote(sequence)
             for i in self._power_chords:
                 if(i['typ']==tipo):
                     mstipo.append(i)
