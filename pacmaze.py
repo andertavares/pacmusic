@@ -105,6 +105,9 @@ class PacMaze:
         self._pacman_pos = (5, 5)
         self._goal = (0, 0)  # a default goal
 
+        self._block_rows = len(self._world)
+        self._block_cols = len(self._world[0])
+
     def query(self, row, col):
         """
         Returns what is in the given world coordinates
@@ -112,7 +115,7 @@ class PacMaze:
         :param col:
         :return:
         """
-        return self._world[row][col]
+        return self._world[row % self._block_rows][col % self._block_cols]
 
     def set_diagonal_moves(self, true_or_false):
         """
