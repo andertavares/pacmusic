@@ -69,10 +69,10 @@ class PacMaze:
     }
 
     DIAGONALS = {
-        'nordeste': (-1, -1),  # acima + esquerda
-        'noroeste': (-1, +1),  # acima + direita
-        'sudeste':  (+1, -1),  # abaixo + esquerda
-        'sudoeste': (+1, +1),  # abaixo + direita
+        'noroeste': (-1, -1),  # acima + esquerda
+        'nordeste': (-1, +1),  # acima + direita
+        'sudoeste': (+1, -1),  # abaixo + esquerda
+        'sudeste':  (+1, +1),  # abaixo + direita
     }
 
     WALL = '#'
