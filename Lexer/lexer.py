@@ -17,9 +17,9 @@ def getArpeggios(data):
         for t in range(len(rex)):
             sobj = re.match(rex[t], data[i:])
             if(sobj):
-                arp.append({'arp':sobj.group(),'pos':i,'typ':t})
+                arp.append({'seq':sobj.group(),'pos':i,'typ':t})
         i=i+1
-        if(i==len(data)):
+        if(i>=len(data)):
             break
     return arp;
 
@@ -39,9 +39,10 @@ def getPowerChords(data):
         for t in range(len(rex)):
             sobj = re.match(rex[t], data[i:])
             if(sobj):
-                chd.append({'chd':sobj.group(),'pos':i,'typ':t})
+                chd.append({'seq':sobj.group(),'pos':i,'typ':t})
+
         i=i+1
-        if(i==len(data)):
+        if(i>=len(data)):
             break
     return chd;
 
@@ -52,7 +53,7 @@ def getNotes(data):
     while True:
         sobj = re.match(rex, data[i:])
         if(sobj):
-            notes.append({'notes':sobj.group(),'pos':i})
+            notes.append({'seq':sobj.group(),'pos':i})
         i=i+1
         if(i==len(data)):
             break

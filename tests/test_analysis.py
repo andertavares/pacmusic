@@ -68,7 +68,7 @@ class TestStats(unittest.TestCase):
         self.assertEquals([2], stats.intervals('CEG'))
 
         # BF occurrences are separated by 3, 0 and 1 notes
-        # [3, 0, 0, 1] ??? 
+        # [3, 0, 0, 1] ???
         self.assertEquals([3, 0, 1], stats.intervals('BF'))
 
         # GBD does not occur, so empty list of intervals

@@ -42,7 +42,7 @@ class Stats(object):
         Returns the arpeggios encountered
         :return:
         """
-        return [x['arp'] for x in self._arpeggios]
+        return [x['seq'] for x in self._arpeggios]
 
     @property
     def notes(self):
@@ -50,7 +50,7 @@ class Stats(object):
         Returns the power chords encountered
         :return:
         """
-        return [x['notes'] for x in self._notes]
+        return [x['seq'] for x in self._notes]
 
     @property
     def power_chords(self):
@@ -58,7 +58,7 @@ class Stats(object):
         Returns the power chords encountered
         :return:
         """
-        return  [x['chd'] for x in self._power_chords]
+        return  [x['seq'] for x in self._power_chords]
 
     @property
     def diagonals(self):
@@ -116,23 +116,28 @@ class Stats(object):
                     break;
             return tipo;
 
-    def occurrences(self, sequence):
+    def occurrences(self, sequence,typ=0):
         """
         Returns the number of times a given sequence
         (chord or power chord) has occurred
         :param sequence: str
         :return: int
         """
-        if(len(sequence)==3):
-            tipo = self.typeOfnote(sequence)
-            return len([i for i in self._arpeggios if i['typ']==tipo])
-        elif(len(sequence)==2):
-            tipo = self.typeOfnote(sequence)
-            return len([i for i in self._power_chords if i['typ']==tipo])
+        if(typ==1):
+            if((len(sequence) <=3) and (len(sequence)>=2)):
+                tipo = self.typeOfnote(sequence)
+                a = {2: self._power_chords, 3: self._arpeggios}
+                return len([i for i in a[len(sequence)] if i['typ']==tipo])
+            else:
+                return 0;
         else:
-            return 0;
+            if((len(sequence) <=3) and (len(sequence)>=2)):
+                a = {2: self._power_chords, 3: self._arpeggios}
+                return len([i for i in a[len(sequence)] if i['seq']==sequence])
+            else:
+                return 0;
 
-    def intervals(self, sequence):
+    def intervals(self, sequence,typ=0):
         """
         Returns a list with the intervals (number of
         other notes) between occurrences of the given
@@ -140,26 +145,32 @@ class Stats(object):
         :param sequence: str
         :return: list of int
         """
-        if(len(sequence)==3):
-            mstipo = []
-            intervals = []
-            tipo = self.typeOfnote(sequence)
-            for i in self._arpeggios:
-                if(i['typ']==tipo):
-                    mstipo.append(i)
-            for i in range(len(mstipo)-1):
-                intervals.append(max(0,mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+3)))
-            return intervals
-
-        elif(len(sequence)==2):
-            mstipo = []
-            intervals = []
-            tipo = self.typeOfnote(sequence)
-            for i in self._power_chords:
-                if(i['typ']==tipo):
-                    mstipo.append(i)
-            for i in range(len(mstipo)-1):
-                intervals.append(max(0,mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+2)))
-            return intervals
+        if(typ==1):
+            if((len(sequence) <=3) and (len(sequence)>=2)):
+                a = {2: self._power_chords, 3: self._arpeggios}
+                mstipo = []
+                intervals = []
+                tipo = self.typeOfnote(sequence)
+                for i in a[len(sequence)]:
+                    if(i['typ']==tipo):
+                        mstipo.append(i)
+                for i in range(len(mstipo)-1):
+                    if(0 <= (mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+len(sequence)))):
+                        intervals.append(max(0,mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+len(sequence))))
+                return intervals
+            else:
+                return [0];
         else:
-            return [0];
+            if(len(sequence) <=3 and len(sequence)>=2):
+                a = {2: self._power_chords, 3: self._arpeggios}
+                intervals = []
+                msmarp = []
+                for i in a[len(sequence)]:
+                    if(i['seq']==sequence):
+                        msmarp.append(i)
+                for i in range(len(msmarp)-1):
+                    if(0 <= (msmarp[i+1]['pos'] - ((msmarp[i]['pos'])+len(sequence)))):
+                        intervals.append((msmarp[i+1]['pos'] - ((msmarp[i]['pos'])+len(sequence))))
+                return intervals;
+            else:
+                return [0]
