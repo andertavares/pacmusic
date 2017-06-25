@@ -5,7 +5,7 @@ import pacmaze
 class TestPacMaze(unittest.TestCase):
 
     def test_successors(self):
-        world = pacmaze.PacMaze('../worlds/7x7_paper.txt')
+        world = pacmaze.PacMaze('worlds/7x7_paper.txt')
 
         # without diagonals:
         world.set_diagonal_moves(False)
@@ -37,7 +37,7 @@ class TestPacMaze(unittest.TestCase):
         self.assertEquals(set(expected_successors), set(world.successors(6, 6)))
 
     def test_query_7x7paper_world(self):
-        world = pacmaze.PacMaze('../worlds/7x7_paper.txt')
+        world = pacmaze.PacMaze('worlds/7x7_paper.txt')
 
         self.assertEquals('E', world.query(5, 5))
 
@@ -47,7 +47,7 @@ class TestPacMaze(unittest.TestCase):
         self.assertEquals('E', world.query(-2, -2))
 
     def test_move_7x7paper_world(self):
-        world = pacmaze.PacMaze('../worlds/7x7_paper.txt')
+        world = pacmaze.PacMaze('worlds/7x7_paper.txt')
 
         path = world.walk((5, 5), ['direita', 'direita', 'direita'])
 

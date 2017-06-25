@@ -35,7 +35,7 @@ C = 3
 D = 4
 E = 5
 F = 6
-G = 7   
+G = 7
 
 """
 Use the note name to retrieve a
@@ -242,18 +242,18 @@ class PacMaze:
         moves = self.STRAIGHT.copy()
         if self._allow_diagonals:
             moves.update(self.DIAGONALS)
-        
+
         # adds current position to path
         path.append((position[0], position[1], self.query(position[0], position[1])))
 
         for direction in directions:
-            
+
             # moves in indicated direction
             position = self.apply_move(position, moves[direction])
 
             # then adds the new position to path
             path.append((position[0], position[1], self.query(position[0], position[1])))
-            
+
 
         # sets final position after 'walking'
         self._pacman_pos = position
@@ -273,21 +273,21 @@ class PacMaze:
         new_row, new_col = position[0] + move[0], position[1] + move[1]
 
         # boundary check and 'wall teleport'
-        if new_row < 0:
-            new_row = len(self._world) - 1  # exit from top, appear on bottom
-            #print 'appear on bottom'
-
-        elif new_row > len(self._world) - 1:
-            new_row = 0  # exit from bottom, appear on top
-            #print 'appear on top'
-
-        if new_col < 0:
-            new_col = len(self._world[0]) - 1  # exit from left, appear on right
-            #print 'appear on right'
-
-        elif new_col > len(self._world[0]) - 1:
-            new_col = 0  # exit from right, appear on left
-            #print 'appear on left'
+        # if new_row < 0:
+        #     new_row = len(self._world) - 1  # exit from top, appear on bottom
+        #     #print 'appear on bottom'
+        #
+        # elif new_row > len(self._world) - 1:
+        #     new_row = 0  # exit from bottom, appear on top
+        #     #print 'appear on top'
+        #
+        # if new_col < 0:
+        #     new_col = len(self._world[0]) - 1  # exit from left, appear on right
+        #     #print 'appear on right'
+        #
+        # elif new_col > len(self._world[0]) - 1:
+        #     new_col = 0  # exit from right, appear on left
+        #     #print 'appear on left'
 
         return new_row, new_col
 
@@ -296,7 +296,7 @@ class PacMaze:
         string = '   ' + ''.join([str(x) for x in range(len(self._world[0]))]) + '\n'
 
         for i, row in enumerate(self._world):
-            
+
             string += str(i).zfill(2) + ' '
 
             for j, cell in enumerate(self._world[i]):
@@ -311,6 +311,3 @@ class PacMaze:
             string += '\n'
 
         return string
-
-
-
