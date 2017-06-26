@@ -83,14 +83,17 @@ def create_target(maze, target_radius, taboo=None):
 
     player_pos = maze.pacman_position()
 
+    # initializes selected coordinates as player's position
     row, col = player_pos
 
+    # adds player position to taboo to activate the loop at least once
+    taboo.append(player_pos)
+
     # randomly selects the goal within target radius
-    # repeats until the coordinates are different from the player position
-    # and do not belong to taboo list
-    while (row, col) == player_pos and (row, col) in taboo:
-        row = random.randint(player_pos - target_radius, player_pos + target_radius)
-        col = random.randint(player_pos - target_radius, player_pos + target_radius)
+    # repeats until coordinates are not in taboo list
+    while (row, col) in taboo:
+        row = random.randint(player_pos[0] - target_radius, player_pos[0] + target_radius)
+        col = random.randint(player_pos[1] - target_radius, player_pos[1] + target_radius)
 
     return col, row
 
@@ -120,7 +123,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '-r', '--target-radius', type=int,
-        help='Maximum distance from player that a target will appear',
+        help='Maximum distance from player (in each axis) that a target will appear',
         default=7
     )
 
