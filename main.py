@@ -25,6 +25,12 @@ def run(params):
     if 'world' in params:
         worldfile = params['world']
 
+    # sets target radius
+    target_radius = params['target_radius']
+
+    # sets max targets
+    max_targets = params['max_targets']
+
     maze = pacmaze.PacMaze(worldfile)
 
     # sets diagonal moves as specified by user
@@ -34,9 +40,7 @@ def run(params):
 
         outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
 
-        # randomly selects the goal within world boundaries
-        row = random.randint(0, len(maze._world) - 1)
-        col = random.randint(0, len(maze._world[0]) - 1)
+        col, row = create_target(maze, target_radius)
         goal = (row, col)
 
         print 'Current goal: (%d, %d)' % goal
@@ -64,6 +68,33 @@ def run(params):
         outfile.close()
 
 
+def create_target(maze, target_radius, taboo=None):
+    """
+    Returns a coordinate (row, col) with a target within a radius from the player
+    It also returns a coordinate outside a taboo list
+    :param maze:pacmaze.PacMaze
+    :param target_radius:int
+    :param taboo:list(tuple(int,int))
+    :return:tuple(int,int)
+    """
+
+    if taboo is None:
+        taboo = []
+
+    player_pos = maze.pacman_position()
+
+    row, col = player_pos
+
+    # randomly selects the goal within target radius
+    # repeats until the coordinates are different from the player position
+    # and do not belong to taboo list
+    while (row, col) == player_pos and (row, col) in taboo:
+        row = random.randint(player_pos - target_radius, player_pos + target_radius)
+        col = random.randint(player_pos - target_radius, player_pos + target_radius)
+
+    return col, row
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='PacMusic - A PacMan-like world with music.')
@@ -85,6 +116,18 @@ if __name__ == '__main__':
     parser.add_argument(
         '-m', '--method', type=str, help='Method used by PacMan to move.',
         action='store', default='astar', choices=['astar', 'random', 'randombiased']
+    )
+
+    parser.add_argument(
+        '-r', '--target-radius', type=int,
+        help='Maximum distance from player that a target will appear',
+        default=7
+    )
+
+    parser.add_argument(
+        '-t', '--max-targets', type=int,
+        help='Maximum number of simultaneous targets',
+        default=3
     )
 
     args = vars(parser.parse_args())
