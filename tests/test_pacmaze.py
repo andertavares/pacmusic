@@ -54,13 +54,13 @@ class TestPacMaze(unittest.TestCase):
         self.assertEquals([
                 (5, 5, 'E'),
                 (5, 6, 'B'),
-                (5, 0, 'F'),
-                (5, 1, 'C'),
+                (5, 7, 'F'),
+                (5, 8, 'C'),
             ],
             path
         )
 
-        self.assertEquals((5, 1), world.pacman_position())
+        self.assertEquals((5, 8), world.pacman_position())
 
 
 if __name__ == '__main__':
