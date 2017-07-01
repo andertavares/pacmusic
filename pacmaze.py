@@ -1,3 +1,4 @@
+import math
 class Node:
 
     def __init__(self, state, parent=None, action=None, cost=0):
@@ -103,7 +104,8 @@ class PacMaze:
 
         self._allow_diagonals = False
         self._pacman_pos = (5, 5)
-        self._goal = (0, 0)  # a default goal
+        self._goals = set()
+        self._goals.add((0, 0)) # a default goal
 
         self._block_rows = len(self._world)
         self._block_cols = len(self._world[0])
@@ -131,15 +133,27 @@ class PacMaze:
     def set_pacman_position(self, row, col):
         self._pacman_pos = (row, col)
 
-    def set_goal(self, row, col):
-        self._goal = (row, col)
+    def add_goal(self, row, col):
+        self._goals.add((row, col))
 
-    def goal_position(self):
+    def remove_goal(self, row,col):
+        self._goals.remove((row, col))
+
+    def closest_goal_position(self):
         """
-        Returns the current goal position
+        Returns the next goal position
         :return: tuple (row, col)
         """
-        return self._goal
+        i = self._pacman_pos
+        fx = lambda f,i: math.sqrt((f[0] - i[0])**2 + (f[1] - i[1])**2) if self._allow_diagonals else abs(f[0] - i[0]) + abs(f[1] - i[1])
+        mf = (float('inf'),float('inf'))
+        df = float('inf')
+        for f in self._goals:
+            di = fx(f,i)
+            if(di<df):
+                df = di
+                mf = (f[0],f[1])
+        return mf
 
     def successors(self, row, col):
         """
@@ -205,7 +219,7 @@ class PacMaze:
         :param state: str
         :return: bool
         """
-        return state == self._goal
+        return state in self._goals
 
     def is_solution(self, start_state, actions):
         """
@@ -250,6 +264,10 @@ class PacMaze:
 
             # moves in indicated direction
             position = self.apply_move(position, moves[direction])
+
+            # remove goal
+            if((position[0], position[1]) in self._goals):
+                self.remove_goal(position[0], position[1])
 
             # then adds the new position to path
             path.append((position[0], position[1], self.query(position[0], position[1])))
@@ -303,7 +321,7 @@ class PacMaze:
                 char = '-' #str(self.query(i,j))
                 if (i, j) == self._pacman_pos:
                     char = 'P'
-                elif (i, j) == self._goal:
+                elif (i, j) in self._goals:
                     char = '*'
 
                 string += char

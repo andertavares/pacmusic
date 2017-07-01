@@ -6,13 +6,13 @@ import sys
 def graph_search(maze, initial_state, fringe):
     explored = {}
     fringe.insert(pacmaze.Node(initial_state))
-    
+
     while True:
         if fringe.is_empty():
             return None
 
         node = fringe.remove()
-        
+
         #print "%d, %d, %d" % (node.state[0], node.state[1], maze.query(node.state[0], node.state[1]))
         #print maze
 
@@ -40,7 +40,7 @@ def dfs(input_file, initial_state):
 
 
 def astar(world, initial_state):
-    manhattan = lambda node: manhattan_distance(node.state, world.goal_position())
+    manhattan = lambda node: manhattan_distance(node.state, world.closest_goal_position())
     sol = graph_search(world, initial_state, fringe.AStarFringe(manhattan))
     #print ' '.join(sol)
     return sol

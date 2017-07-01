@@ -15,7 +15,7 @@ def run(params):
     # sets random seed
     if 'random_seed' in params:
         random.seed(params['random_seed'])
-    
+
     # creates output directory
     outdir = params['output_dir']
     if not os.path.exists(outdir):
@@ -43,9 +43,9 @@ def run(params):
         col, row = create_target(maze, target_radius)
         goal = (row, col)
 
-        print 'Current goal: (%d, %d)' % goal
+        print('Current goal: (%d, %d)' % goal)
 
-        maze.set_goal(goal[0], goal[1])
+        maze.add_goal(goal[0], goal[1])
 
         directions = []
 
@@ -57,7 +57,7 @@ def run(params):
             directions = random_walk.random_walk(maze, maze.pacman_position())
 
         # print 'Directions:', directions #pacmaze.PacMaze.solution(goal)
-        
+
         path = maze.walk(maze.pacman_position(), directions)
         # print 'PM at', maze.pacman_position()
 
