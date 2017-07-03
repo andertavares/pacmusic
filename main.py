@@ -105,7 +105,7 @@ if __name__ == '__main__':
     parser.add_argument('-w', '--world', type=str, help='Path to the world file')
     parser.add_argument(
         '-n', '--number-trials', type=int, default=100,
-        help='Number of goals the agent must seek'
+        help='Number of trials (can be seen as repetitions)'
     )
     parser.add_argument(
         '-s', '--random_seed', type=int,
@@ -128,9 +128,14 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
-        '-t', '--max-targets', type=int,
+        '-t', '--max-targets', type=int, default=3,
         help='Maximum number of simultaneous targets',
-        default=3
+
+    )
+
+    parser.add_argument(
+        '--max-steps', type=int, default=120,
+        help='Maximum number of steps per trial.',
     )
 
     args = vars(parser.parse_args())
