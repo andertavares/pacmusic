@@ -27,7 +27,7 @@ def random_walk(world, initial_position):
         moves.append(direction)
 
         # checks whether goal was reached
-        if current_pos == world.goal_position():
+        if current_pos == world.closest_goal_position():
             break
 
     # sets pac man position and returns

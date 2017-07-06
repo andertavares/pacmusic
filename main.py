@@ -31,6 +31,7 @@ def run(params):
     # sets max targets
     max_targets = params['max_targets']
 
+
     maze = pacmaze.PacMaze(worldfile)
 
     # sets diagonal moves as specified by user
@@ -38,33 +39,47 @@ def run(params):
 
     for num in range(args['number_trials']): #, goal in enumerate(goals):
 
+        cont_steps = 0
+
+        for i in range(args['max_targets']):
+            col, row = create_target(maze, target_radius)
+            goal = (row, col)
+            maze.add_goal(goal[0], goal[1])
+
+        # print(maze._goals) #print list goals
+
         outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
 
-        col, row = create_target(maze, target_radius)
-        goal = (row, col)
+        while(cont_steps <= args['max_steps']):
 
-        print('Current goal: (%d, %d)' % goal)
+            # print(maze._goals) #print list remaining
+            # print maze.__str__() # print world
 
-        maze.add_goal(goal[0], goal[1])
+            if(len(maze._goals)==0):
+                break
 
-        directions = []
+            posible_directions = []
+            # determines which method will be used for walking
+            if params['method'] == 'astar':
+                posible_directions = search.astar(maze, maze.pacman_position())
 
-        # determines which method will be used for walking
-        if params['method'] == 'astar':
-            directions = search.astar(maze, maze.pacman_position())
+            elif params['method'] == 'random':
+                posible_directions = random_walk.random_walk(maze, maze.pacman_position())
 
-        elif params['method'] == 'random':
-            directions = random_walk.random_walk(maze, maze.pacman_position())
+            real_directions = []
+            for i in posible_directions:
+                if(cont_steps<=args['max_steps']):
+                    real_directions.append(i)
+                    cont_steps = cont_steps + 1
+                else:
+                    break
+            path = maze.walk(maze.pacman_position(), real_directions)
 
-        # print 'Directions:', directions #pacmaze.PacMaze.solution(goal)
-
-        path = maze.walk(maze.pacman_position(), directions)
-        # print 'PM at', maze.pacman_position()
-
-        outfile.write('\n'.join(['%d, %d, %s' % (x[0], x[1], x[2]) for x in path]))
-        # print '\n'.join(['%d, %d, %s' % (x[0], x[1], pacmaze.NOTE_TO_INT[x[2]]) for x in path])
-
-        print 'File written.'
+            # print 'PM at', maze.pacman_position()
+            outfile.write('\n'.join(['%d, %d, %s' % (x[0], x[1], x[2]) for x in path]))
+            outfile.write('\n')
+            # print '\n'.join(['%d, %d, %s' % (x[0], x[1], pacmaze.NOTE_TO_INT[x[2]]) for x in path])
+        print 'File '+ str(num) +' written.'
         outfile.close()
 
 

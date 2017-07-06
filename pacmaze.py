@@ -105,7 +105,7 @@ class PacMaze:
         self._allow_diagonals = False
         self._pacman_pos = (5, 5)
         self._goals = set()
-        self._goals.add((0, 0)) # a default goal
+        # self._goals.add((0, 0)) # a default goal
 
         self._block_rows = len(self._world)
         self._block_cols = len(self._world[0])
