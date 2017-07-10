@@ -266,7 +266,7 @@ class PacMaze:
             position = self.apply_move(position, moves[direction])
 
             # remove goal
-            if((position[0], position[1]) in self._goals):
+            if (position[0], position[1]) in self._goals:
                 self.remove_goal(position[0], position[1])
 
             # then adds the new position to path

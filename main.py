@@ -50,36 +50,43 @@ def run(params):
 
         outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
 
-        while(cont_steps <= args['max_steps']):
+        while cont_steps <= args['max_steps']:
 
             # print(maze._goals) #print list remaining
             # print maze.__str__() # print world
 
-            if(len(maze._goals)==0):
+            if len(maze._goals) == 0:
                 break
 
-            posible_directions = []
+            possible_directions = []
             # determines which method will be used for walking
             if params['method'] == 'astar':
-                posible_directions = search.astar(maze, maze.pacman_position())
+                possible_directions = search.astar(maze, maze.pacman_position())
 
             elif params['method'] == 'random':
-                posible_directions = random_walk.random_walk(maze, maze.pacman_position())
+                possible_directions = random_walk.random_walk(maze, maze.pacman_position())
 
             real_directions = []
-            for i in posible_directions:
-                if(cont_steps<=args['max_steps']):
+            for i in possible_directions:
+                print cont_steps
+                if cont_steps <= args['max_steps']:
                     real_directions.append(i)
                     cont_steps = cont_steps + 1
                 else:
                     break
             path = maze.walk(maze.pacman_position(), real_directions)
 
+            # agent might have reached some goals, let's re-add them
+            while len(maze._goals) < args['max_targets']:
+                col, row = create_target(maze, target_radius)
+                goal = (row, col)
+                maze.add_goal(goal[0], goal[1])
+
             # print 'PM at', maze.pacman_position()
             outfile.write('\n'.join(['%d, %d, %s' % (x[0], x[1], x[2]) for x in path]))
             outfile.write('\n')
             # print '\n'.join(['%d, %d, %s' % (x[0], x[1], pacmaze.NOTE_TO_INT[x[2]]) for x in path])
-        print 'File '+ str(num) +' written.'
+        print 'File ' + str(num) + ' written.'
         outfile.close()
 
 
