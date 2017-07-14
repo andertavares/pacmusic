@@ -48,9 +48,11 @@ def run(params):
 
         # print(maze._goals) #print list goals
 
-        outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
 
-        while cont_steps <= args['max_steps']:
+        outfile = open(os.path.join(outdir, 'log%d.log' % num), 'w')
+        outfile.write('%d, %d, %s' % (maze.pacman_position()[0], maze.pacman_position()[1], maze.query(maze.pacman_position()[0],maze.pacman_position()[1])))
+        outfile.write('\n')
+        while cont_steps < args['max_steps']:
 
             # print(maze._goals) #print list remaining
             # print maze.__str__() # print world
@@ -69,13 +71,12 @@ def run(params):
             real_directions = []
             for i in possible_directions:
                 print cont_steps
-                if cont_steps <= args['max_steps']:
+                if cont_steps < args['max_steps']:
                     real_directions.append(i)
                     cont_steps = cont_steps + 1
                 else:
                     break
             path = maze.walk(maze.pacman_position(), real_directions)
-
             # agent might have reached some goals, let's re-add them
             while len(maze._goals) < args['max_targets']:
                 col, row = create_target(maze, target_radius)

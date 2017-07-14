@@ -258,7 +258,7 @@ class PacMaze:
             moves.update(self.DIAGONALS)
 
         # adds current position to path
-        path.append((position[0], position[1], self.query(position[0], position[1])))
+        # path.append((position[0], position[1], self.query(position[0], position[1])))
 
         for direction in directions:
 
