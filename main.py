@@ -1,3 +1,4 @@
+#!/usr/bin/python2.7
 import random_walk
 import argparse
 import pacmaze
