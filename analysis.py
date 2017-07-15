@@ -1,6 +1,7 @@
 import Lexer.lexer as lx
 import re
 
+
 class Stats(object):
 
     def __init__(self):
@@ -98,8 +99,8 @@ class Stats(object):
             for t in range(len(rex)):
                 if(re.match(rex[t],x)):
                     tipo = t
-                    break;
-            return tipo;
+                    break
+            return tipo
         elif(len(x)==2):
             rex = []
             tipo = 8
@@ -159,7 +160,7 @@ class Stats(object):
                         intervals.append(max(0,mstipo[i+1]['pos'] - ((mstipo[i]['pos'])+len(sequence))))
                 return intervals
             else:
-                return [0];
+                return [0]
         else:
             if(len(sequence) <=3 and len(sequence)>=2):
                 a = {2: self._power_chords, 3: self._arpeggios}
@@ -171,6 +172,16 @@ class Stats(object):
                 for i in range(len(msmarp)-1):
                     if(0 <= (msmarp[i+1]['pos'] - ((msmarp[i]['pos'])+len(sequence)))):
                         intervals.append((msmarp[i+1]['pos'] - ((msmarp[i]['pos'])+len(sequence))))
-                return intervals;
+                return intervals
             else:
                 return [0]
+
+
+if __name__ == '__main__':
+    """
+    TODO: receive the file via command line and print its statistics:
+    - Number of moves, 
+    - Arpeggios (number of occurrences and intervals between them)
+    - Power chords (number of occurrences and intervals between them) 
+    """
+    pass
