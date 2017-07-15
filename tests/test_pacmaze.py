@@ -51,8 +51,8 @@ class TestPacMaze(unittest.TestCase):
 
         path = world.walk((5, 5), ['direita', 'direita', 'direita'])
 
+        # initial position (5, 5) won't appear in path
         self.assertEquals([
-                (5, 5, 'E'),
                 (5, 6, 'B'),
                 (5, 7, 'F'),
                 (5, 8, 'C'),
