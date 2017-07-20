@@ -1,5 +1,6 @@
 import Lexer.lexer as lx
 import re
+import sys
 
 
 class Stats(object):
@@ -180,8 +181,41 @@ class Stats(object):
 if __name__ == '__main__':
     """
     TODO: receive the file via command line and print its statistics:
-    - Number of moves, 
+    - Number of moves,
     - Arpeggios (number of occurrences and intervals between them)
-    - Power chords (number of occurrences and intervals between them) 
+    - Power chords (number of occurrences and intervals between them)
     """
+    if(len(sys.argv)>1):
+        s = Stats()
+        s.analyse(sys.argv[1])
+
+        print("Sequence of notes: \n\n"+ str(s.notes)+ "\n")
+        print("Number of moves: "+ str(s.num_moves())+ "\n")
+        if(len(s.arpeggios) != 0):
+            print("Arpeggios: ")
+            for i in s.arpeggios:
+                print "     ",
+                print(i+ ": "),
+                print "Occurrences: ", s.occurrences(i),
+                if(s.occurrences(i)>1):
+                    print "Intervals: ", s.intervals(i)
+                else:
+                    print
+        print("Total arpeggios: "+ str(len(s.arpeggios)) +"\n")
+
+        if(len(s.power_chords) != 0):
+            print("Power chords: ")
+            for i in s.power_chords:
+                print "     ",
+                print(i+ ": "),
+                print "Occurrences: ", s.occurrences(i),
+                if(s.occurrences(i)>1):
+                    print "Intervals: ", s.intervals(i)
+                else:
+                    print
+        print("Total power chords: "+ str(len((s.power_chords))))
+
+
+    else:
+        print("Add a file with argumment")
     pass
