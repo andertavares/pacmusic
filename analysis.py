@@ -1,3 +1,4 @@
+#!/usr/bin/python2.7
 import Lexer.lexer as lx
 import re
 import sys
