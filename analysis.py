@@ -185,37 +185,38 @@ if __name__ == '__main__':
     - Arpeggios (number of occurrences and intervals between them)
     - Power chords (number of occurrences and intervals between them)
     """
-    if(len(sys.argv)>1):
-        s = Stats()
-        s.analyse(sys.argv[1])
+    # tests whether we have enough arguments
+    if len(sys.argv) == 1:
+        print "Please give a list of files for analysis"
+        sys.exit(0)
 
-        print("Sequence of notes: \n\n"+ str(s.notes)+ "\n")
-        print("Number of moves: "+ str(s.num_moves())+ "\n")
-        if(len(s.arpeggios) != 0):
+    # performs the analysis for each file
+    s = Stats()
+    for filename in sys.argv[1:]:
+        s.analyse(filename)
+        print "File: %s" % filename
+        print "Sequence of notes: \n%s\n" % s.notes
+        print "Number of moves: %d\n " % s.num_moves()
+        if len(s.arpeggios) != 0:
             print("Arpeggios: ")
             for i in s.arpeggios:
-                print "     ",
-                print(i+ ": "),
+                print "\t%s" % i,
                 print "Occurrences: ", s.occurrences(i),
-                if(s.occurrences(i)>1):
+                if s.occurrences(i) > 1:
                     print "Intervals: ", s.intervals(i)
                 else:
                     print
-        print("Total arpeggios: "+ str(len(s.arpeggios)) +"\n")
+        print "Total arpeggios: %d\n" % len(s.arpeggios)
 
-        if(len(s.power_chords) != 0):
+        if len(s.power_chords) != 0:
             print("Power chords: ")
             for i in s.power_chords:
-                print "     ",
-                print(i+ ": "),
+                print "\t%s: " % i,
                 print "Occurrences: ", s.occurrences(i),
-                if(s.occurrences(i)>1):
+                if s.occurrences(i) > 1:
                     print "Intervals: ", s.intervals(i)
                 else:
                     print
-        print("Total power chords: "+ str(len((s.power_chords))))
-
-
-    else:
-        print("Add a file with argumment")
-    pass
+        print "Total power chords: %d" % len(s.power_chords)
+        print "----------------------"
+    print "Done"
